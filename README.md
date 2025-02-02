@@ -12,7 +12,7 @@
 
 
 ### 3. contact-module
-- sending emails to site admin
+- sending emails to the site admin
 
 
 ### 4. home-module (all static)
