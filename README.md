@@ -1,4 +1,4 @@
-# JOURNEY project in ONE glance 
+# JOURNEY project at ONE glance 
 
 ### 1. about-module (almost static) 
 - display staff's profiles
