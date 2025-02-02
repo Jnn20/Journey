@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}comments{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">comments</h6>
+                <h1 class="mb-5">all comments for the article</h1>
+            </div>
+
+
+            <form method="post">{% csrf_token %}
+                {% for comment in comments %}
+                    <div>
+                    <label>display
+                        <input type="checkbox" name="{{ comment.id }}" {% if comment.display %} checked {% endif %}>
+                    </label> [{{ comment.user }}] : {{ comment.text }}
+                    </div>
+                {% endfor %}<br>
+            <button class="btn btn-success">save</button>
+            <a class="btn btn-warning" href="{% url 'articles-page' %}">Go back</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

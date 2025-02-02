@@ -1,0 +1,23 @@
+{% load render_partial %}
+
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-1">
+            {% for main_category in main_categories %}
+                {% if not main_category.parent %}
+                    <div class="col-lg-2 col-md-4 wow fadeInUp" data-wow-delay="0.1s"
+                         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                        <a href="{% url 'articles-by-category' category=main_category.url_title %}">
+                            <div class="team-item">
+                                <div class="text-center p-4">
+                                    <h6 class="mb-0">{{ main_category.title }}</h6>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+

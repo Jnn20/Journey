@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}articles{% endblock %}
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">articles</h6>
+                <h1 class="mb-5">All articles in journey</h1>
+            </div>
+
+            {% include 'profile/components/profile-menu-component.html' %}
+            {% include 'staff/components/staff-menu-component.html' %}
+
+            <br><br>
+
+            <!-- articles list start -->
+            <div class="row g-4 justify-content-center">
+                {% for article in article_list %}
+                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s"
+                         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                        <div class="package-item">
+                            <div class="overflow-hidden">
+                                {% thumbnail article.image "400x300" crop="center" as im %}
+                                    <img class="img-fluid" src="{{ im.url }}" alt="">
+                                {% endthumbnail %}
+                            </div>
+                            <div class="d-flex border-bottom">
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-map-marker-alt text-primary me-2"></i>{{ article.city }}</small>
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-calendar-alt text-primary me-2"></i>{{ article.create_date }}
+                                </small>
+                                <small class="flex-fill text-center py-2"><a
+                                        href="{% url 'user-info' article.author.username %}"><i
+                                        class="fa fa-user text-primary me-2"></i>{{ article.author.username }}
+                                </a></small>
+                            </div>
+                            <div class="text-center p-4">
+                                <h3 class="mb-0">{{ article.title }}</h3>
+                                <div class="mb-3">
+                                    <!-- rating part -->
+                                </div>
+                                <p>{{ article.short_description }}</p>
+
+                                <div class="d-flex justify-content-center mb-2">
+                                    <a href="{% url 'article-detail-page' article.id %}"
+                                       class="btn btn-primary px-3 border-end btn-sm"
+                                       style="border-radius: 30px 0 0 30px;">read</a>
+
+                                    <a href="{% url 'display-comments-page' pk=article.id %}"
+                                       class="btn btn-primary px-3 border-end btn-sm">comments</a>
+
+                                    <a href="{% url 'edit-article-page' pk=article.id %}"
+                                       class="btn btn-primary px-3 btn-sm"
+                                       style="border-radius: 0 30px 30px 0;">edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- articles list start -->
+
+            <br>
+
+            <!-- pagination start -->
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s" ;>
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">
+                        <button class="btn btn-outline-dark">previous page</button>
+                    </a> {% endif %}
+                    {% for page in paginator.page_range %}
+                        <a href="?page={{ page }}">
+                            <button class="btn btn-outline-dark {% if page_obj.number == page %}active{% endif %}">{{ page }}</button>
+                        </a>
+                    {% endfor %}
+                    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">
+                        <button class="btn btn-outline-dark">next page</button>
+                    </a> {% endif %}
+                {% endif %}
+            </div>
+            <!-- pagination end -->
+        </div>
+    </div>
+
+{% endblock %}

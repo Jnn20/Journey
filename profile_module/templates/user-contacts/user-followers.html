@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}followers{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">{{ username }}'s followers list</h6>
+                <h1 class="mb-5">Followers</h1>
+            </div>
+
+
+            <div class="row g-4">
+                {% for follower in followers %}
+                    <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s"
+                         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                        <div class="team-item">
+                            <div class="overflow-hidden">
+                                {% thumbnail follower.user_profile.avatar "400x400" as im %}
+                                    <img class="img-fluid" src="{{ im.url }}" alt="">
+                                {% endthumbnail %}
+                            </div>
+                            <div class="position-relative d-flex justify-content-center" style="margin-top: -19px;">
+                                <a class="btn btn-square mx-1" href=""><i class="fab fa-telegram"></i></a>
+                                <a class="btn btn-square mx-1" href=""><i class="fab fa-instagram"></i></a>
+                                <a class="btn btn-square mx-1" href=""><i class="fab fa-linkedin"></i></a>
+                            </div>
+                            <a style="color: gray" href="{% url 'user-info' follower.username %}">
+                                <div class="text-center p-4">
+                                    <h5 class="mb-0">{{ follower.username }}</h5>
+                                    <small>{{ follower.user_profile.about | truncatewords:5 }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

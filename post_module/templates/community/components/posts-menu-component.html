@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+        <div style="margin-bottom: 10px;">
+
+            <h4 style="display: inline-block">
+                <a class="btn btn-outline-success {% if request.resolver_match.url_name == 'explore-page' %}active{% endif %}"
+                   href="{% url 'explore-page' %}" style="padding: 20px 30px;">
+                    explore among all posts
+                </a>
+            </h4>
+
+            <h4 style="display: inline-block">
+                <a class="btn btn-outline-success {% if request.resolver_match.url_name == 'user-following-posts-page' %}active{% endif %}"
+                   href="{% url 'user-following-posts-page' %}" style="padding: 20px 30px;">
+                    your following's posts
+                </a>
+            </h4>
+
+        </div>
+    </div>
+</div>

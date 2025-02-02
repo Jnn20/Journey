@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}for staff{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            {% include 'profile/components/profile-menu-component.html' %}
+            {% include 'staff/components/staff-menu-component.html' %}
+        </div>
+    </div>
+
+{% endblock %}

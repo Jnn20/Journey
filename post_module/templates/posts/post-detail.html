@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}post detail{% endblock %}
+
+{% block content %}
+    <!-- post detail start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">by {{ post.user.username }}</h6>
+                <h1 class="mb-5">{{ post.title }}
+
+                    <!-- like button start !-->
+                    <i class="like-button fa fa-heart {% if liked %}text-primary{% endif %}"></i>
+                    <span class="likes-count">{{ post.liked_by.count }}</span>
+                    <!-- like button end !-->
+
+                </h1>
+            </div>
+            <p>{{ post.text }}</p>
+            <h5>{{ post.publish }}</h5>
+            <a class="btn btn-warning" href="{{ request.META.HTTP_REFERER }}">Go back</a>
+        </div>
+    </div>
+    <!-- post detail end -->
+
+    <!-- display comments start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Comments</h6>
+                <h1 class="mb-5">Leave your comments down here</h1>
+            </div>
+            <div class="row g-4">
+                {% for comment in post.posted_comments.all %}
+                    <a href="{% url 'user-info' comment.user.username %}">
+                        <div class="col-lg-12 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="service-item rounded pt-3">
+                                <div class="p-4">
+                                    <strong style="color: darkolivegreen">From : {{ comment.user.username }}</strong>
+                                    <p style="color: gray">{{ comment.text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- display comments end -->
+
+    <!-- comment form start -->
+    {% if request.user.is_authenticated %}
+        {% include 'posts/components/post-comments.html' %}
+    {% else %}
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title bg-white text-center text-primary px-3">notice</h6>
+                </div>
+                <h6 class="text-center">to leave comments you must be <a href="{% url 'login-page' %}">logged in</a>.
+                </h6>
+            </div>
+        </div>
+    {% endif %}
+    <!-- comment form end -->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.like-button').click(function () {
+                var button = $(this);
+                console.log('{{ post.id }}')
+                $.ajax({
+                    type: 'POST',
+                    url: '/like-post',
+                    data: {'post_id': {{post.id}}, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status) {
+                            button.addClass('text-primary')
+                        } else {
+                            button.removeClass('text-primary')
+                        }
+                        $('.likes-count').text(data.likes_count)
+                    }
+                })
+            })
+        })
+    </script>
+
+{% endblock %}
+
+

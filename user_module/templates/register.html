@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %} register {% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">Register</h6>
+                <h1 class="mb-5">Become a part of Journey</h1>
+            </div>
+            <div class="row g-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                {{ register_form.username }}
+                                <label>Enter a Username</label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-floating">
+                                {{ register_form.email }}
+                                <label>Enter Your Email</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {{ register_form.password }}
+                                <label>Enter Your Password</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                {{ register_form.confirm_password }}
+                                <label for="message">Enter your password again</label>
+                            </div>
+                        </div>
+                        {{ register_form.email.errors }}
+                        {{ register_form.confirm_password.errors }}
+                        <div class="col-12">
+                            <button class="btn btn-primary w-100 py-3" type="submit">Create Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

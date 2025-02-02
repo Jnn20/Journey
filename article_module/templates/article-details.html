@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load render_partial %}
+{% load thumbnail %}
+
+{% block title %}article details{% endblock %}
+
+{% block content %}
+    <!-- article detail start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s"
+                     style="min-height: 400px; visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                    <div class="position-relative h-100">
+                        {% thumbnail article.image "600x400" crop="center" as im %}
+                            <img class="img-fluid position-absolute" src="{{ im.url }}" alt="">
+                        {% endthumbnail %}
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s"
+                     style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInUp;">
+                    <h6><a href="{% url 'user-info' article.author.username %}"
+                           class="section-title bg-white text-start text-primary pe-3">by
+                        : {{ article.author.username }}</a></h6>
+                    <h1 class="mb-4">{{ article.title }}</h1>
+                    <p class="mb-4">{{ article.text }}</p>
+                    <p class="mb-4">yep</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- article detail end -->
+
+    <!-- display comments start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Comments</h6>
+                <h1 class="mb-5">Leave your comments down here</h1>
+            </div>
+            <div class="row g-4">
+                {% for comment in display_true_comments %}
+                    <a href="{% url 'user-info' comment.user.username %}">
+                        <div class="col-lg-12 col-sm-12 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="service-item rounded pt-3">
+                                <div class="p-4">
+                                    <strong style="color: darkolivegreen">From : {{ comment.user.username }}</strong>
+                                    <p style="color: gray">{{ comment.text }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- display comments end -->
+
+    <!-- comment form start -->
+    {% if request.user.is_authenticated %}
+        {% include 'components/article-comments.html' %}
+    {% else %}
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                    <h6 class="section-title bg-white text-center text-primary px-3">notice</h6>
+                </div>
+                <h6 class="text-center">to leave comments you must be <a href="{% url 'login-page' %}">logged in</a>.
+                </h6>
+            </div>
+        </div>
+    {% endif %}
+    <!-- comment form end -->
+{% endblock %}
+
+

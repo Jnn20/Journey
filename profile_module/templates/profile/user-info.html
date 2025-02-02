@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+
+{% block title %}profile{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+
+            {% if user == request.user %}
+                {% include 'profile/components/profile-menu-component.html' %}
+            {% endif %}
+
+            <div class="container-xxl py-5">
+                <div class="container">
+                    <div class="row g-5">
+                        <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s"
+                             style="min-height: 400px; visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                            <div class="position-relative h-100">
+                                {% thumbnail user.user_profile.avatar "400x400" crop="center" as im %}
+                                    <img class="img-fluid position-absolute" src="{{ im.url }}" alt="">
+                                {% endthumbnail %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s"
+                             style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInUp;">
+                            <div class="row gy-2 gx-4 mb-4">
+
+                                <!-- follow system start -->
+                                <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                                     style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                                    <h6 class="section-title bg-white text-center text-primary px-3">user</h6>
+                                    <h1 class="mb-5">user {{ user.username }} profile</h1>
+
+
+                                    {% if request.user == user %}
+                                    {% elif request.user in user.followers.all %}
+                                        <a class="btn btn-primary btn-close-white" id="follow-button">UnFollow</a>
+                                    {% else %}
+                                        <a class="btn btn-primary btn-success" id="follow-button">Follow</a>
+                                    {% endif %}
+
+                                    <p><br>
+                                        <span id="following">{{ following_count }}</span>
+                                        <a href="{% url 'display-following-page' user.username %}">Following </a>
+                                        <span style="color: green">& </span>
+                                        <span id="followers">{{ followers_count }}</span>
+                                        <a href="{% url 'display-followers-page' user.username %}">Followers</a>
+                                    </p>
+                                </div>
+                                <!-- follow system end -->
+
+                                <!-- information start -->
+                                <div class="row gy-2 gx-4 mb-4">
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>email
+                                            : {{ user.email }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>instagram
+                                            : {{ user.user_profile.instagram }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>job
+                                            : {{ user.user_profile.job }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>linkedin
+                                            : {{ user.user_profile.linkedin }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>phone
+                                            : {{ user.phone }}</p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>telegram
+                                            : {{ user.user_profile.telegram }}</p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>about
+                                            : {{ user.user_profile.about }}</p>
+                                    </div>
+                                </div>
+                                <!-- information end -->
+                            </div>
+
+
+                            <p>
+                                {% if request.user == user %}
+                                    <a href="{% url 'edit-profile-page' %}" type="submit" class="btn btn-warning">Edit
+                                        Profile</a>
+                                {% endif %}
+                                <a href="{% url 'recent-activities-page' user.username %}" class="btn btn-warning">activities</a>
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            $('#follow-button').click(function () {
+                var button = $(this)
+                $.ajax({
+                    type: "POST",
+                    url: {% url 'follow' %},
+                    data: {'csrfmiddlewaretoken': '{{ csrf_token }}', 'user_id': '{{ user.id }}'},
+                    success: function (data) {
+                        if (data.follow) {
+                            button.text('UnFollow')
+                            button.removeClass('btn-success')
+                            button.addClass('btn-close-white')
+                        } else {
+                            button.text('Follow')
+                            button.removeClass('btn-close-white')
+                            button.addClass('btn-success')
+                        }
+                        $('#following').text(data.following_count);
+                        $('#followers').text(data.followers_count)
+                    }
+                })
+            })
+        })
+    </script>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+<div style="border: #0c4128 solid 2px; margin-bottom: 5px ;padding: 20px 20px">
+    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+
+        <h4 style="display: inline-block"><a href="{% url 'user-info' request.user.username %}"
+                                             style="padding: 20px 30px;">profile</a></h4>
+
+        <h4 style="display: inline-block"><a href="{% url 'user-posts-page' %}" style="padding: 20px 30px;">your posts</a></h4>
+
+        <h4 style="display: inline-block"><a href="{% url 'user-post-comments-page' %}"
+                                             style="padding: 20px 30px;">comments for you</a>
+        </h4>
+
+        <h4 style="display: inline-block"><a href="{% url 'user-favorites-page' %}"
+                                             style="padding: 20px 30px;">favorites</a>
+        </h4>
+
+        {% if request.user.is_staff %}
+            <h4 style="display: inline-block"><a class="btn btn-primary rounded-pill py-2" href="{% url 'staff-page' %}"
+                                                 style="padding: 30px 40px">For Staffs</a>
+            </h4>
+        {% endif %}
+    </div>
+</div>
+

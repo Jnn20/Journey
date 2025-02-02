@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}edit profile{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+
+            {% include 'profile/components/profile-menu-component.html' %}
+
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">here you can edit your profile</h6>
+                <h1 class="mb-5">your profile</h1>
+
+                <form method="post" enctype="multipart/form-data" action="{% url 'edit-profile-page' %}">
+                    {% csrf_token %}
+                    {{ user_form.as_p }}
+                    <p>* * *</p>
+                    {{ profile_form.as_p }}
+                    <button href="{% url 'edit-profile-page' %}" class="btn btn-success">Save the Changes</button>
+                    <a href="{% url 'logout-page' %}" class="btn btn-danger">LogOut</a>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

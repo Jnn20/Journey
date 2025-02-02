@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block title %}posts{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            {% include 'profile/components/profile-menu-component.html' %}
+            <br>
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">all of your published posts in
+                    Journey</h6>
+                <h1 class="mb-5">My Posts</h1>
+            </div>
+
+            <!-- posts start -->
+            <div class="row g-4 justify-content-center">
+                {% for post in object_list %}
+                    <input type="hidden" class="post-id-{{ post.id }}" value="post-id-{{ post.id }}">
+                    <div class="post-id-{{ post.id }} post-area col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s"
+                         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                        <div class="package-item">
+                            <div class="overflow-hidden">
+                                {% thumbnail post.image "400x300" crop="center" as im %}
+                                    <img class="img-fluid" src="{{ im.url }}" alt="">
+                                {% endthumbnail %}
+                            </div>
+                            <div class="d-flex border-bottom">
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-user text-primary me-2"></i>{{ post.user.username }}</small>
+                                <small class="flex-fill text-center border-end py-2"><i
+                                        class="fa fa-heart text-primary me-2"></i>{{ post.liked_by.count }}</small>
+                                <small class="flex-fill text-center py-2"><i
+                                        class="fa fa-clock text-primary me-2"></i>{{ post.publish | date }}</small>
+                            </div>
+                            <div class="text-center p-4">
+
+                                <p>{{ post.title }}</p>
+                                <div class="d-flex justify-content-center mb-2">
+
+                                    <a href="{% url 'edit-post-page' post.id %}"
+                                       class="btn btn-primary px-3 border-end"
+                                       style="border-radius: 30px 0 0 30px;">Edit</a>
+
+                                    <a href="{% url 'post-detail-page' post.id %}"
+                                       class="btn btn-primary px-3 border-end">Read</a>
+
+                                    <a data-input-id="{{ post.id }}" class="delete-button btn btn-primary px-3"
+                                       style="border-radius: 0 30px 30px 0;">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- posts end -->
+            <br>
+            <div class="text-center wow fadeInUp">
+                <a href="{% url 'create-post-page' %}" class="btn btn-primary py-3 px-5 mt-2">Create a new post</a>
+            </div>
+            <br>
+            <!-- pagination start -->
+            {% if is_paginated %}
+                {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">
+                    <button class="btn btn-outline-dark">previous page</button>
+                </a> {% endif %}
+                {% for page in paginator.page_range %}
+                    <a href="?page={{ page }}">
+                        <button class="btn btn-outline-dark {% if page_obj.number == page %}active{% endif %}">{{ page }}</button>
+                    </a>
+                {% endfor %}
+                {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">
+                    <button class="btn btn-outline-dark">next page</button>
+                </a> {% endif %}
+            {% endif %}
+            <!-- pagination end -->
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.delete-button').click(function () {
+                var input_id = $(this).data('input-id');
+                $.ajax({
+                    type: 'POST',
+                    url: {% url 'delete-post' %},
+                    data: {'input_id': input_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    success: function (data) {
+                        console.log(data.status)
+                        if (data.status) {
+                            $('.post-id-' + input_id).remove()
+                        } else {
+                            alert(data.error)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,29 @@
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+    <div class="container">
+        <div class="booking p-5">
+            <div class="row g-5 align-items-center">
+                <div class="col-md-6 text-white">
+                    <h6 class="text-white text-uppercase">Rules to send comments</h6>
+                    <p class="mb-4">all is...</p>
+                </div>
+                <div class="col-md-6">
+                    <form method="post" action=""> {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ comment_form }}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-outline-light w-100 py-3" type="submit">Submit the comment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

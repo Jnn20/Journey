@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}post comments{% endblock %}
+
+{% block content %}
+    <div class="container-xxl py-5">
+        <div class="container">
+
+            {% include 'profile/components/profile-menu-component.html' %}
+            <br>
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s"
+                 style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                <h6 class="section-title bg-white text-center text-primary px-3">all comments bellow your posts in
+                    journey</h6>
+                <h1 class="mb-5">your post comments</h1>
+
+
+                <!-- pagination start -->
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">
+                        <button class="btn btn-outline-dark">previous page</button>
+                    </a> {% endif %}
+                    {% for page in paginator.page_range %}
+                        <a href="?page={{ page }}">
+                            <button class="btn btn-outline-dark {% if page_obj.number == page %}active{% endif %}">{{ page }}</button>
+                        </a>
+                    {% endfor %}
+                    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">
+                        <button class="btn btn-outline-dark">next page</button>
+                    </a> {% endif %}
+                {% endif %}
+                <!-- pagination end -->
+                <br><br>
+            </div>
+            <!-- comments start -->
+            <div class="row g-4">
+                {% for comment in object_list %}
+                    <div class="col-lg-12 col-sm-12 wow fadeInUp" data-wow-delay="0.1s"
+                         style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInUp;">
+                        <a href="{{ comment.post.get_absolute_url }}">
+                            <div class="service-item rounded pt-3">
+                                <div class="p-4">
+                                    <p>
+                                        <i class="fa fa-2x fa-pen text-primary mb-4"></i>
+                                        for: <strong style="color: green">{{ comment.post.title }}</strong>
+                                        | sent by : <span style="color: green">{{ comment.user.username }}</span>
+                                        | in <span style="color: green">{{ comment.publish }}</span>
+                                    </p>
+                                    <p>{{ comment.text }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+
+
+            </div>
+            <!-- comments end -->
+        </div>
+    </div>
+{% endblock %}
